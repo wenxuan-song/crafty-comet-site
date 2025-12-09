@@ -1,125 +1,97 @@
-# [The Academic CV That Gets You Hired](https://github.com/HugoBlox/theme-academic-cv)
+# Data Dictionary
 
-[![Screenshot](.github/preview.webp)](https://hugoblox.com/templates/academic-cv/start/?utm_source=github&utm_medium=readme)
+This document describes variables in the input datasets and the merged dataset.
 
-<h1 align="center">Build an Academic CV and Resumé That Stands Out</h1>
+## Input Datasets
 
-<p align="center">
-  <strong>Your unfair advantage in academia and tech.</strong><br/>
-  Showcase your work, boost your citations, and land your dream job at places like <strong>Meta, Google, and Stanford</strong>.
-</p>
+### CDC COPD Prevalence Dataset
 
-<p align="center">
-  <a href="https://hugoblox.com/templates/academic-cv/start?utm_source=github&utm_medium=readme"><b>🚀 Deploy Your Free CV in 60s</b></a>
-  &nbsp;•&nbsp;
-  <a href="https://hugoblox.com/templates/?open=academic-cv&loading=true&utm_source=github&utm_medium=readme">Live Demo</a>
-  &nbsp;•&nbsp;
-  <a href="https://hugoblox.com/pro?utm_source=github&utm_medium=readme"><b>✨ Upgrade to Pro</b></a>
-</p>
+**File**: Data/input_data/County_COPD_prevalence.csv (original) or Data/cleaned/copd_clean.csv (cleaned)
 
-<p align="center">
-  Trusted by 250,000+ researchers, students, and educators worldwide.
-</p>
+**Records**: 3,147 counties (original), varies after cleaning
 
-<p align="center">
-  <a href="https://discord.gg/z8wNYzb">
-    <img src="https://img.shields.io/discord/722225264733716590?label=Join%20Discord&style=social" alt="Discord">
-  </a>
-  <a href="https://github.com/HugoBlox/theme-academic-cv">
-    <img src="https://img.shields.io/github/stars/HugoBlox/theme-academic-cv?label=Star%20Academic%20CV&style=social" alt="GitHub Stars">
-  </a>
-</p>
+**All Original Variables**:
+- **FullGeoName** (String): Combined geographic label (state abbreviation + county name)
+- **LocationID** (String): Unique numeric code representing the county
+- **Public_Health_Jurisdiction** (String): State or jurisdiction responsible for the record
+- **StateDesc** (String): Full name of the state
+- **County** (String): Full name of the county
+- **Percent_COPD** (Numeric): Percentage of adults diagnosed with COPD in the county (Range: 3.3% to 13.3%)
+- **95% Confidence Interval** (String): Range of values reflecting statistical uncertainty around estimated COPD prevalence
+- **Quartile** (String): Quartile classification of COPD prevalence
 
----
+**Variables Used in Merged Dataset**:
+- State (mapped from StateDesc)
+- County (standardized, no " County" suffix)
+- Percent_COPD
+- Quartile
 
-## Your Career Starts Here
+**Citation**: Centers for Disease Control and Prevention. (2021). County-Level Estimates of COPD Prevalence. Retrieved from https://www.cdc.gov/copd/php/case-reporting/county-level-estimates-in-copd.html
 
-The Academic CV template is designed for impact. Whether you're an AI researcher, a recent graduate, or a seasoned professor, this is the last resumé you'll ever need.
+### EPA Air Quality Dataset
 
-- **✍️ Showcase Your Expertise:** Easily write content with Markdown, Jupyter, or RStudio. Display your publications, talks, and projects in a stunning, professional layout.
-- **📈 Boost Your Citations:** Automatic BibTeX import and SEO-optimized pages mean your work gets discovered more easily, increasing your research impact.
-- **💼 Land Your Dream Job:** Create a memorable online presence that impresses recruiters from top tech firms and prestigious universities.
-- **🚀 Launch in Minutes:** No coding required. The Hugo Blox Builder lets you customize everything with drag-and-drop sections.
+**File**: Data/input_data/annual_aqi_by_county_2021.csv (original) or Data/cleaned/air_clean.csv (cleaned)
 
-<p align="center">
-  <a href="https://hugoblox.com/templates/academic-cv/start?utm_source=github&utm_medium=readme">
-    <img src="https://img.shields.io/badge/⚡️%20Get%20Your%20CV%20in%2060s-ff4655?style=for-the-badge" alt="Deploy this template" width="400">
-  </a>
-</p>
+**Records**: 1,006 counties (original), varies after cleaning
 
----
+**All Original Variables**:
+- **State** (String): Full name of the U.S. state
+- **County** (String): Full name of the county
+- **Year** (Integer): Year of data collection (2021)
+- **Days with AQI** (Integer): Number of days with AQI data
+- **Good Days** (Integer): Number of days with Good AQI (0-50)
+- **Moderate Days** (Integer): Number of days with Moderate AQI (51-100)
+- **Unhealthy for Sensitive Groups Days** (Integer): Number of days with Unhealthy for Sensitive Groups AQI (101-150)
+- **Unhealthy Days** (Integer): Number of days with Unhealthy AQI (151-200)
+- **Very Unhealthy Days** (Integer): Number of days with Very Unhealthy AQI (201-300)
+- **Hazardous Days** (Integer): Number of days with Hazardous AQI (301-500)
+- **Max AQI** (Integer): Maximum AQI value for the year
+- **90th Percentile AQI** (Integer): 90th percentile AQI value
+- **Median AQI** (Integer): Median Air Quality Index value (Range: 3 to 122)
+- **Days CO** (Integer): Number of days with elevated carbon monoxide levels
+- **Days NO2** (Integer): Number of days with elevated nitrogen dioxide levels (Range: 0 to 364)
+- **Days Ozone** (Integer): Number of days with elevated ozone levels (Range: 0 to 365)
+- **Days PM2.5** (Integer): Number of days with elevated PM2.5 levels (Range: 0 to 365)
+- **Days PM10** (Integer): Number of days with elevated PM10 levels (Range: 0 to 365)
 
-## Level Up with Pro Templates
+**Variables Used in Merged Dataset**:
+- State
+- County (standardized, no " County" suffix)
+- Year
+- Median AQI
+- Days Ozone
+- Days PM2.5
+- Days NO2
+- Days PM10
 
-Ready to take your career to the next level? Our Pro templates offer exclusive designs and features to help you stand out even more.
+**Citation**: Environmental Protection Agency. (2021). Annual Air Quality Index by County. Retrieved from https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual
 
-<!-- <p align="center">
-  <img src="" alt="Free vs Pro templates">
-</p>-->
+## Merged Dataset
 
-| Feature              | Academic CV (Free)       | Academic CV Pro & Resumé Pro     |
-| -------------------- | ------------------------ | -------------------------------- |
-| **Design**           | Professional & clean     | **Exclusive premium designs**    |
-| **Layouts**          | Standard resumé sections | **Advanced layouts & timelines** |
-| **Call to Action**   | Simple contact link      | **Prominent CTA buttons**        |
-| **First Impression** | Strong                   | **Unforgettable**                |
+### Combined Dataset
 
-<br/>
-<p align="center">
-  <a href="https://hugoblox.com/pro?utm_source=github&utm_medium=readme"><b>💎 Get the Pro Pass</b></a> — Includes all Pro templates for a one-time price.<br/>
-  <a href="https://hugoblox.com/templates/academic-cv-pro/start?utm_source=github&utm_medium=readme">✨ Deploy Academic CV Pro</a>
-  &nbsp;•&nbsp;
-  <a href="https://hugoblox.com/templates/resume-pro/start?utm_source=github&utm_medium=readme">📄 Deploy Resumé Pro</a>
-</p>
+**File**: Data/merge_data/merged_dataset.csv
 
----
+**Records**: 923 counties (after inner join of both datasets)
 
-## What Researchers Say
+**Variables** (10 total):
 
-> “Hugo Blox saved me 40+ hours on my lab site. BibTeX integration auto-updates publications — **our citations are up 3×**.”
-> — **Dr. Sarah Yang**, AI Researcher
+**Geographic Identifiers**:
+- **State** (String): Full name of the U.S. state
+- **County** (String): County name (standardized, no " County" suffix)
 
----
+**Health Outcome** (from CDC):
+- **Percent_COPD** (Numeric): Percentage of adults diagnosed with COPD in the county (Range: 3.3% to 13.3%)
+- **Quartile** (String): Quartile classification of COPD prevalence
 
-## Get Started in Minutes
+**Temporal** (from EPA):
+- **Year** (Integer): Year of data collection (2021)
 
-### Recommended (Fastest)
+**Air Quality Variables** (from EPA):
+- **Median AQI** (Integer): Median Air Quality Index value (Range: 3 to 122)
+- **Days Ozone** (Integer): Number of days with elevated ozone levels (Range: 0 to 365)
+- **Days PM2.5** (Integer): Number of days with elevated PM2.5 levels (Range: 0 to 365)
+- **Days NO2** (Integer): Number of days with elevated nitrogen dioxide levels (Range: 0 to 364)
+- **Days PM10** (Integer): Number of days with elevated PM10 levels (Range: 0 to 365)
 
-Deploy your site to GitHub Pages in just 60 seconds with our browser-based starter.
-
-👉 <a href="https://hugoblox.com/templates/academic-cv/start?utm_source=github&utm_medium=readme"><b>Start with the Academic CV Template</b></a>
-
-### Prefer the Command Line?
-
-Use the local quickstart:
-
-```bash
-# 1. Install Hugo Extended → https://docs.hugoblox.com/getting-started/install-hugo/
-# 2. Clone this starter
-git clone https://github.com/HugoBlox/theme-academic-cv my-site
-cd my-site
-
-# 3. Run locally
-pnpm install && hugo server
-```
-
-For more guides, visit our documentation at **https://docs.hugoblox.com/**.
-
----
-
-## Join the Community
-
-Join thousands of creators in our vibrant community to ask questions, share your work, and help us improve.
-
-- 💬 <a href="https://discord.gg/z8wNYzb">Discord</a>
-- 📚 <a href="https://docs.hugoblox.com/?utm_source=github&utm_medium=readme">Docs & Guides</a>
-- 🐦 <a href="https://x.com/BuildLore">X / Twitter</a>
-- ⭐ <a href="https://github.com/HugoBlox/hugo-blox-builder">Star on GitHub</a>
-
----
-
-MIT © 2016-Present [George Cushen](https://georgecushen.com)
-
-<!--START_SECTION:news-->
-<!--Updated at 2025-11-23T02:11:14.091Z-->
-<!--END_SECTION:news-->
+**Merge Method**: Inner join on State and County columns
