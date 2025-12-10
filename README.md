@@ -1,130 +1,45 @@
-# Documentation
+Quick Summary:
 
-This document provide the technical documentation for the Air Quality and COPD Prevalence Analysis project based on the workflow.ipynb.
+- Code/Software: MIT License
+- Source Data (CDC, EPA): Public Domain
+- Merged Dataset: CC0 1.0 (Public Domain Dedication)
 
-## Getting Started (For TAs)
+---
 
-### Step 1: Data Acquisition
+MIT License
 
-There are two ways to obtain the input data files:
+Copyright (c) 2025 Jackson Song and Erica Cai
 
-**Option 1: Download from UIUC Box Folder (Recommended)**
-- Download from: https://uofi.box.com/s/q60tyfy78aamuya8340uzchizcm6p2gl
-- Place files in Data/input_data/:
-  - annual_aqi_by_county_2021.csv
-  - County_COPD_prevalence.csv
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-**Option 2: Download from Source Websites**
-- EPA AQI data: https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual
-  - Download annual_aqi_by_county_2021.zip
-  - Extract the annual_aqi_by_county_2021.csv
-  - Save to Data/input_data/annual_aqi_by_county_2021.csv
-- CDC COPD data: https://www.cdc.gov/copd/php/case-reporting/county-level-estimates-in-copd.html
-  - Download the CSV
-  - Save to Data/input_data/County_COPD_prevalence.csv
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-### Step 2: Set Up Environment
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-pip install -r requirements.txt
+---
 
-**Note on pip_freeze.txt:**
-The pip_freeze.txt file contains the exact versions of all packages (including dependencies) from our development environment. This file is for reference and troubleshooting purposes. If you encounter version conflicts or need to match the exact environment, you can use:
+Data License
 
-pip install -r pip_freeze.txt
-
-However, requirements.txt is recommend for normal installation.
-
-### Step 3: Open Jupyter Notebook: workflow.ipynb
-
-### Step 4: Run Snakemake Commands in Notebook
-
-The notebook contains two Snakemake commands that must be run in order:
-
-**First Snakemake Command:**
-
-!snakemake --cores 1
-
-**What this does:**
-- Cleans both datasets (EPA and CDC) using scripts/data_clean.py
-- Creates Data/cleaned/air_clean.csv
-- Creates Data/cleaned/copd_clean.csv
-- Integrates the cleaned datasets using scripts/data_integration.py
-- Creates Data/merge_data/merged_dataset.csv
-
-**Second Snakemake Command:**
-
-!snakemake --cores 1 --forceall check_integrity
-
-**What this does:**
-- Verifies data integrity using SHA-256 checksums
-- Checks input data files and merged dataset
-- Prints three SHA-256 checksums to the console
-
-**Expected Output:**
-When you run this command, you should see the following checksums:
-
-8c4d462e9db5166f2e56e59fe2a3de1c56d6b93b278bbb9280a667e5e9d811d5
-2fdc551ec38d346d3f3d9609f50710c85eedb9daea0e6d079a8249a12837920f
-c2024080939ff712552681fcd3eb5e549b84a9aa2d51046bf84cef371154c96a
-
-These correspond to:
-1. annual_aqi_by_county_2021.csv
-2. County_COPD_prevalence.csv
-3. merged_dataset.csv
-
-If they match, it means the data files haven't been damaged.
-
-### Step 5: Run Analysis Cells in Notebook
-
-After running the Snakemake commands, run the remaining cells in the notebook to:
-
-1. **Load and explore data**: Check dataset structure, missing values, data types
-2. **Calculate summary statistics**: Get descriptive statistics for all variables
-3. **Perform correlation analysis**: Calculate correlation matrix
-4. **Generate visualizations**: Run the visualization cells to create the following plots:
-   - **Graph 1: Correlation Heatmap - Relationships Between COPD and Air Quality Variables**
-     - Run the cell to create correlation heatmap
-   - **Graph 2: Data Distributions**
-     - Run the cell to create distribution histograms
-   - **Graph 3: COPD vs Each Pollutant**
-     - Run the cell to create scatter plots for each pollutant vs COPD
-   - **Graph 4: Direct Comparison - Which Pollutant is Most Closely Linked to COPD? (Answering RQ2)**
-     - Run the cell to create bar chart comparing correlations
-5. **Run multicollinearity diagnostics**: Calculate VIF values
-6. **Perform OLS regression**: Run multiple regression analysis
-
-
-## Script Documentation
-
-### scripts/data_clean.py
-
-Cleans and standardizes raw input data from CDC and EPA sources.
-
-**Functions**:
-- clean_copd(input_path, output_path): Cleans CDC COPD prevalence dataset
-  - Removes "County" suffix from county names
-  - Converts Percent_COPD to numeric
-  - Removes missing values
-  - Outputs: State, County, Percent_COPD, Quartile
-
-- clean_air(input_path, output_path): Cleans EPA air quality dataset
-  - Removes "County" suffix from county names
-  - Converts numeric columns
-  - Removes missing values
-  - Outputs: State, County, Year, Median AQI, Days Ozone, Days PM2.5, Days NO2, Days PM10
-
-### scripts/data_integration.py
-
-Integrates cleaned COPD and air quality datasets.
-
-**Functions**:
-- integrate_datasets(copd_path, air_path, merged_path): Merges datasets on State and County
-  - Performs inner join
-  - Outputs merged dataset with 923 counties
-
-### scripts/check_integrity.py
-
-Verifies data integrity using SHA-256 checksums.
-
-**Functions**:
-- sha256(file): Calculates SHA-256 hash of a file
+1. Source Data
+   - CDC COPD Data: Public Domain (U.S. Government Work)
+   - EPA Air Quality Data: Public Domain (U.S. Government Work)
+   
+2. Merged Dataset
+   - License: CC0 1.0 Universal (Public Domain Dedication)
+   - Location: Data/merge_data/merged_dataset.csv
+   
+For complete details, see:
+- README.md (full project documentation)
+- METADATA.json (dataset metadata and licensing information)
