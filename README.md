@@ -1,4 +1,4 @@
-Quick Summary:
+# Quick Summary:
 
 - Code/Software: MIT License
 - Source Data (CDC, EPA): Public Domain
@@ -6,7 +6,7 @@ Quick Summary:
 
 ---
 
-MIT License
+# MIT License
 
 Copyright (c) 2025 Jackson Song and Erica Cai
 
@@ -30,7 +30,7 @@ SOFTWARE.
 
 ---
 
-Data License
+#Data License
 
 1. Source Data
    - CDC COPD Data: Public Domain (U.S. Government Work)
@@ -42,4 +42,4 @@ Data License
    
 For complete details, see:
 - README.md (full project documentation)
-- METADATA.json (dataset metadata and licensing information)
+- Metadata.json (dataset metadata and licensing information)
