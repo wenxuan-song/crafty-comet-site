@@ -1,89 +1,92 @@
-# Data Dictionary
+# Technical Documentation
 
-This document describes variables in the input datasets and the merged dataset.
+This document provides technical documentation for the Air Quality and COPD Prevalence Analysis project.
 
-## Input Datasets
+## Script Documentation
 
-### CDC COPD Prevalence Dataset
+### scripts/data_clean.py
 
-**File**: Data/input_data/County_COPD_prevalence.csv (original) or Data/cleaned/copd_clean.csv (cleaned)
+Cleans and standardizes raw input data from CDC and EPA sources.
 
-**Records**: 3,147 counties (original), varies after cleaning
+**Functions**:
+- `clean_copd(input_path, output_path)`: Cleans CDC COPD prevalence dataset
+  - Removes " County" suffix from county names
+  - Converts Percent_COPD to numeric
+  - Removes missing values
+  - Outputs: State, County, Percent_COPD, Quartile
 
-**All Original Variables**:
-- **FullGeoName** (String): Combined geographic label (state abbreviation + county name)
-- **LocationID** (String): Unique numeric code representing the county
-- **Public_Health_Jurisdiction** (String): State or jurisdiction responsible for the record
-- **StateDesc** (String): Full name of the state
-- **County** (String): Full name of the county
-- **Percent_COPD** (Numeric): Percentage of adults diagnosed with COPD in the county (Range: 3.3% to 13.3%)
-- **95% Confidence Interval** (String): Range of values reflecting statistical uncertainty around estimated COPD prevalence
-- **Quartile** (String): Quartile classification of COPD prevalence
+- `clean_air(input_path, output_path)`: Cleans EPA air quality dataset
+  - Removes " County" suffix from county names
+  - Converts numeric columns
+  - Removes missing values
+  - Outputs: State, County, Year, Median AQI, Days Ozone, Days PM2.5, Days NO2, Days PM10
 
-**Variables Used in Merged Dataset**:
-- State
-- County
-- Percent_COPD
-- Quartile
+### scripts/data_integration.py
 
-**Citation**: Centers for Disease Control and Prevention. (2021). County-Level Estimates of COPD Prevalence. Retrieved from https://www.cdc.gov/copd/php/case-reporting/county-level-estimates-in-copd.html
+Integrates cleaned COPD and air quality datasets.
 
-### EPA Air Quality Dataset
+**Functions**:
+- `integrate_datasets(copd_path, air_path, merged_path)`: Merges datasets on State and County
+  - Performs inner join
+  - Outputs merged dataset with 923 counties
 
-**File**: Data/input_data/annual_aqi_by_county_2021.csv (original) or Data/cleaned/air_clean.csv (cleaned)
+### scripts/check_integrity.py
 
-**Records**: 1,006 counties (original), varies after cleaning
+Verifies data integrity using SHA-256 checksums.
 
-**All Original Variables**:
-- **State** (String): Full name of the U.S. state
-- **County** (String): Full name of the county
-- **Year** (Integer): Year of data collection (2021)
-- **Days with AQI** (Integer): Number of days with AQI data
-- **Good Days** (Integer): Number of days with Good AQI (0-50)
-- **Moderate Days** (Integer): Number of days with Moderate AQI (51-100)
-- **Unhealthy for Sensitive Groups Days** (Integer): Number of days with Unhealthy for Sensitive Groups AQI (101-150)
-- **Unhealthy Days** (Integer): Number of days with Unhealthy AQI (151-200)
-- **Very Unhealthy Days** (Integer): Number of days with Very Unhealthy AQI (201-300)
-- **Hazardous Days** (Integer): Number of days with Hazardous AQI (301-500)
-- **Max AQI** (Integer): Maximum AQI value for the year
-- **90th Percentile AQI** (Integer): 90th percentile AQI value
-- **Median AQI** (Integer): Median Air Quality Index value (Range: 3 to 122)
-- **Days CO** (Integer): Number of days with elevated carbon monoxide levels
-- **Days NO2** (Integer): Number of days with elevated nitrogen dioxide levels (Range: 0 to 364)
-- **Days Ozone** (Integer): Number of days with elevated ozone levels (Range: 0 to 365)
-- **Days PM2.5** (Integer): Number of days with elevated PM2.5 levels (Range: 0 to 365)
-- **Days PM10** (Integer): Number of days with elevated PM10 levels (Range: 0 to 365)
+**Functions**:
+- `sha256(file)`: Calculates SHA-256 hash of a file
 
-**Variables Used in Merged Dataset**:
-- State
-- County
-- Year
-- Median AQI
-- Days Ozone
-- Days PM2.5
-- Days NO2
-- Days PM10
+## Workflow Documentation
 
-**Citation**: Environmental Protection Agency. (2021). Annual Air Quality Index by County. Retrieved from https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual
+### Snakemake Workflow
 
-## Merged Dataset
+The project uses Snakemake for workflow automation.
 
-### Combined Dataset
+**Rules**:
+1. `check_integrity`: Verifies input data files
+2. `clean_data`: Cleans both datasets
+3. `integrate_datasets`: Merges cleaned datasets
+4. `all`: Default target producing final merged dataset
 
-**File**: Data/merge_data/merged_dataset.csv
+**Execution**:
+```bash
+# Run complete workflow
+snakemake --cores 1
 
-**Records**: 923 counties (after inner join of both datasets)
+# Run specific rule
+snakemake clean_data --cores 1
+```
 
-**Variables** (10 total):
-- **State** (String): Full name of the U.S. state
-- **County** (String): County name (standardized, no " County" suffix)
-- **Percent_COPD** (Numeric): Percentage of adults diagnosed with COPD in the county (Range: 3.3% to 13.3%)
-- **Quartile** (String): Quartile classification of COPD prevalence
-- **Year** (Integer): Year of data collection (2021)
-- **Median AQI** (Integer): Median Air Quality Index value (Range: 3 to 122)
-- **Days Ozone** (Integer): Number of days with elevated ozone levels (Range: 0 to 365)
-- **Days PM2.5** (Integer): Number of days with elevated PM2.5 levels (Range: 0 to 365)
-- **Days NO2** (Integer): Number of days with elevated nitrogen dioxide levels (Range: 0 to 364)
-- **Days PM10** (Integer): Number of days with elevated PM10 levels (Range: 0 to 365)
+## Data Pipeline
 
-**Merge Method**: Inner join on State and County columns
+1. **Data Acquisition**: Download from CDC and EPA websites, store in `Data/input_data/`
+2. **Data Cleaning**: Run `scripts/data_clean.py` to clean both datasets
+3. **Data Integration**: Run `scripts/data_integration.py` to merge datasets
+4. **Analysis**: Use `workflow.ipynb` for statistical analysis and visualization
+
+## Usage
+
+### Quick Start
+
+1. Download data from Box link (see README.md) to `Data/input_data/`
+2. Set up environment: `pip install -r requirements.txt`
+3. Run workflow: `snakemake --cores 1`
+4. Open notebook: `jupyter notebook workflow.ipynb`
+
+### Running Scripts Directly
+
+```bash
+python scripts/data_clean.py
+python scripts/data_integration.py
+python scripts/check_integrity.py
+```
+
+## Troubleshooting
+
+- **FileNotFoundError**: Ensure input data files are in `Data/input_data/`
+- **ModuleNotFoundError**: Install packages with `pip install -r requirements.txt`
+- **Snakemake "Nothing to be done"**: Files are up to date. Use `--forceall` to re-run
+- **Jupyter errors**: Ensure merged dataset exists and kernel uses correct environment
+
+For more details, see README.md and USER_GUIDE.md.
