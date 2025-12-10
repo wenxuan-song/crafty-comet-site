@@ -25,24 +25,17 @@ There are two ways to obtain the input data files:
 
 ### Step 2: Set Up Environment
 
-```bash
 pip install -r requirements.txt
-```
 
-### Step 3: Open Jupyter Notebook
-
-```bash
-jupyter notebook workflow.ipynb
-```
+### Step 3: Open Jupyter Notebook: workflow.ipynb
 
 ### Step 4: Run Snakemake Commands in Notebook
 
 The notebook contains two Snakemake commands that must be run in order:
 
 **First Snakemake Command:**
-```python
+
 !snakemake --cores 1
-```
 
 **What this does:**
 - Cleans both datasets (EPA and CDC) using scripts/data_clean.py
@@ -52,14 +45,27 @@ The notebook contains two Snakemake commands that must be run in order:
 - Creates Data/merge_data/merged_dataset.csv
 
 **Second Snakemake Command:**
-```python
+
 !snakemake --cores 1 --forceall check_integrity
-```
 
 **What this does:**
 - Verifies data integrity using SHA-256 checksums
 - Checks input data files and merged dataset
-- Creates Data/input_data/.integrity_checked marker file
+- Prints three SHA-256 checksums to the console
+
+**Expected Output:**
+When you run this command, you should see the following checksums:
+
+8c4d462e9db5166f2e56e59fe2a3de1c56d6b93b278bbb9280a667e5e9d811d5
+2fdc551ec38d346d3f3d9609f50710c85eedb9daea0e6d079a8249a12837920f
+c2024080939ff712552681fcd3eb5e549b84a9aa2d51046bf84cef371154c96a
+
+These correspond to:
+1. annual_aqi_by_county_2021.csv
+2. County_COPD_prevalence.csv
+3. merged_dataset.csv
+
+If they match, it means the data files haven't been damaged.
 
 ### Step 5: Run Analysis Cells in Notebook
 
@@ -68,9 +74,20 @@ After running the Snakemake commands, run the remaining cells in the notebook to
 1. **Load and explore data**: Check dataset structure, missing values, data types
 2. **Calculate summary statistics**: Get descriptive statistics for all variables
 3. **Perform correlation analysis**: Calculate correlation matrix
-4. **Generate visualizations**: Create all plots (see Visualization section below)
+4. **Generate visualizations**: Run the visualization cells to create the following plots:
+   - **Graph 1: Correlation Heatmap - Relationships Between COPD and Air Quality Variables**
+     - Run the cell to create correlation heatmap
+   - **Graph 2: Data Distributions**
+     - Run the cell to create distribution histograms
+   - **Graph 3: COPD vs Each Pollutant**
+     - Run the cell to create scatter plots for each pollutant vs COPD
+   - **Graph 4: Direct Comparison - Which Pollutant is Most Closely Linked to COPD? (Answering RQ2)**
+     - Run the cell to create bar chart comparing correlations
 5. **Run multicollinearity diagnostics**: Calculate VIF values
 6. **Perform OLS regression**: Run multiple regression analysis
+
+
+
 
 ## Script Documentation
 
@@ -79,13 +96,13 @@ After running the Snakemake commands, run the remaining cells in the notebook to
 Cleans and standardizes raw input data from CDC and EPA sources.
 
 **Functions**:
-- `clean_copd(input_path, output_path)`: Cleans CDC COPD prevalence dataset
+- clean_copd(input_path, output_path): Cleans CDC COPD prevalence dataset
   - Removes " County" suffix from county names
   - Converts Percent_COPD to numeric
   - Removes missing values
   - Outputs: State, County, Percent_COPD, Quartile
 
-- `clean_air(input_path, output_path)`: Cleans EPA air quality dataset
+- clean_air(input_path, output_path): Cleans EPA air quality dataset
   - Removes " County" suffix from county names
   - Converts numeric columns
   - Removes missing values
@@ -96,7 +113,7 @@ Cleans and standardizes raw input data from CDC and EPA sources.
 Integrates cleaned COPD and air quality datasets.
 
 **Functions**:
-- `integrate_datasets(copd_path, air_path, merged_path)`: Merges datasets on State and County
+- integrate_datasets(copd_path, air_path, merged_path): Merges datasets on State and County
   - Performs inner join
   - Outputs merged dataset with 923 counties
 
@@ -105,79 +122,4 @@ Integrates cleaned COPD and air quality datasets.
 Verifies data integrity using SHA-256 checksums.
 
 **Functions**:
-- `sha256(file)`: Calculates SHA-256 hash of a file
-
-## Workflow Documentation
-
-### Snakemake Workflow
-
-The project uses Snakemake for workflow automation. There are two Snakemake commands in the notebook:
-
-1. **First command**: `!snakemake --cores 1`
-   - Executes: clean_data and integrate_datasets rules
-   - Produces: cleaned datasets and merged dataset
-
-2. **Second command**: `!snakemake --cores 1 --forceall check_integrity`
-   - Executes: check_integrity rule
-   - Verifies: data file integrity
-
-**Rules**:
-1. `check_integrity`: Verifies input data files using SHA-256 checksums
-2. `clean_data`: Cleans both datasets (EPA and CDC)
-3. `integrate_datasets`: Merges cleaned datasets
-4. `all`: Default target producing final merged dataset
-
-### Analysis Workflow (workflow.ipynb)
-
-The Jupyter notebook workflow.ipynb contains the complete analysis:
-
-1. **Data Loading and Exploration**: Load merged dataset and check structure
-2. **Statistics**: Summary statistics for all variables
-3. **Correlation Analysis**: Correlation matrix between COPD and air quality variables
-4. **Visualizations**: See Visualization section below
-5. **Multicollinearity Diagnostics**: VIF (Variance Inflation Factor) analysis
-6. **OLS Regression**: Multiple regression model with all air quality variables
-
-## Visualizations
-
-Run the visualization cells in the notebook to generate the following plots:
-
-1. **Graph 1: Correlation Heatmap - Relationships Between COPD and Air Quality Variables**
-   - Run the cell to create correlation heatmap
-
-2. **Graph 2: Data Distributions**
-   - Run the cell to create distribution histograms
-
-3. **Graph 4: COPD vs Each Pollutant**
-   - Run the cell to create scatter plots for each pollutant vs COPD
-
-4. **Graph 5: Direct Comparison - Which Pollutant is Most Closely Linked to COPD? (Answering RQ2)**
-   - Run the cell to create bar chart comparing correlations
-
-## Usage
-
-### Quick Start
-
-1. **Get data** (choose one option above)
-2. **Set up environment**: `pip install -r requirements.txt`
-3. **Open notebook**: `jupyter notebook workflow.ipynb`
-4. **Run first Snakemake command**: `!snakemake --cores 1`
-5. **Run second Snakemake command**: `!snakemake --cores 1 --forceall check_integrity`
-6. **Run all remaining cells** in the notebook to execute the complete analysis
-
-### Running Scripts Directly
-
-```bash
-python scripts/data_clean.py
-python scripts/data_integration.py
-python scripts/check_integrity.py
-```
-
-## Troubleshooting
-
-- **FileNotFoundError**: Ensure input data files are in Data/input_data/
-- **ModuleNotFoundError**: Install packages with `pip install -r requirements.txt`
-- **Snakemake "Nothing to be done"**: Files are up to date. Use `--forceall` to re-run
-- **Jupyter errors**: Ensure merged dataset exists and kernel uses correct environment
-
-For more details, see README.md and USER_GUIDE.md.
+- sha256(file): Calculates SHA-256 hash of a file
