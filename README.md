@@ -1,4 +1,4 @@
-# Technical Documentation
+# Documentation
 
 This document provides technical documentation for the Air Quality and COPD Prevalence Analysis project based on the workflow.ipynb.
 
@@ -26,6 +26,13 @@ There are two ways to obtain the input data files:
 ### Step 2: Set Up Environment
 
 pip install -r requirements.txt
+
+**Note on pip_freeze.txt:**
+The pip_freeze.txt file contains the exact versions of all packages (including dependencies) from the development environment. This file is provided for reference and troubleshooting purposes. If you encounter version conflicts or need to match the exact environment, you can use:
+
+pip install -r pip_freeze.txt
+
+However, requirements.txt (with version ranges) is recommended for normal installation as it allows for compatible package updates.
 
 ### Step 3: Open Jupyter Notebook: workflow.ipynb
 
@@ -85,8 +92,6 @@ After running the Snakemake commands, run the remaining cells in the notebook to
      - Run the cell to create bar chart comparing correlations
 5. **Run multicollinearity diagnostics**: Calculate VIF values
 6. **Perform OLS regression**: Run multiple regression analysis
-
-
 
 
 ## Script Documentation
