@@ -1,6 +1,6 @@
 # Documentation
 
-This document provides technical documentation for the Air Quality and COPD Prevalence Analysis project based on the workflow.ipynb.
+This document provide the technical documentation for the Air Quality and COPD Prevalence Analysis project based on the workflow.ipynb.
 
 ## Getting Started (For TAs)
 
@@ -8,7 +8,7 @@ This document provides technical documentation for the Air Quality and COPD Prev
 
 There are two ways to obtain the input data files:
 
-**Option 1: Download from Box (Recommended)**
+**Option 1: Download from UIUC Box Folder (Recommended)**
 - Download from: https://uofi.box.com/s/q60tyfy78aamuya8340uzchizcm6p2gl
 - Place files in Data/input_data/:
   - annual_aqi_by_county_2021.csv
@@ -20,7 +20,7 @@ There are two ways to obtain the input data files:
   - Extract the annual_aqi_by_county_2021.csv
   - Save to Data/input_data/annual_aqi_by_county_2021.csv
 - CDC COPD data: https://www.cdc.gov/copd/php/case-reporting/county-level-estimates-in-copd.html
-  - Download CSV
+  - Download the CSV
   - Save to Data/input_data/County_COPD_prevalence.csv
 
 ### Step 2: Set Up Environment
@@ -28,11 +28,11 @@ There are two ways to obtain the input data files:
 pip install -r requirements.txt
 
 **Note on pip_freeze.txt:**
-The pip_freeze.txt file contains the exact versions of all packages (including dependencies) from the development environment. This file is provided for reference and troubleshooting purposes. If you encounter version conflicts or need to match the exact environment, you can use:
+The pip_freeze.txt file contains the exact versions of all packages (including dependencies) from our development environment. This file is for reference and troubleshooting purposes. If you encounter version conflicts or need to match the exact environment, you can use:
 
 pip install -r pip_freeze.txt
 
-However, requirements.txt (with version ranges) is recommended for normal installation as it allows for compatible package updates.
+However, requirements.txt is recommend for normal installation.
 
 ### Step 3: Open Jupyter Notebook: workflow.ipynb
 
@@ -46,9 +46,9 @@ The notebook contains two Snakemake commands that must be run in order:
 
 **What this does:**
 - Cleans both datasets (EPA and CDC) using scripts/data_clean.py
-- Integrates the cleaned datasets using scripts/data_integration.py
 - Creates Data/cleaned/air_clean.csv
 - Creates Data/cleaned/copd_clean.csv
+- Integrates the cleaned datasets using scripts/data_integration.py
 - Creates Data/merge_data/merged_dataset.csv
 
 **Second Snakemake Command:**
@@ -102,13 +102,13 @@ Cleans and standardizes raw input data from CDC and EPA sources.
 
 **Functions**:
 - clean_copd(input_path, output_path): Cleans CDC COPD prevalence dataset
-  - Removes " County" suffix from county names
+  - Removes "County" suffix from county names
   - Converts Percent_COPD to numeric
   - Removes missing values
   - Outputs: State, County, Percent_COPD, Quartile
 
 - clean_air(input_path, output_path): Cleans EPA air quality dataset
-  - Removes " County" suffix from county names
+  - Removes "County" suffix from county names
   - Converts numeric columns
   - Removes missing values
   - Outputs: State, County, Year, Median AQI, Days Ozone, Days PM2.5, Days NO2, Days PM10
