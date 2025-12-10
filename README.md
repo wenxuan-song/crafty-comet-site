@@ -21,8 +21,8 @@ This document describes variables in the input datasets and the merged dataset.
 - **Quartile** (String): Quartile classification of COPD prevalence
 
 **Variables Used in Merged Dataset**:
-- State (mapped from StateDesc)
-- County (standardized, no " County" suffix)
+- State
+- County
 - Percent_COPD
 - Quartile
 
@@ -56,7 +56,7 @@ This document describes variables in the input datasets and the merged dataset.
 
 **Variables Used in Merged Dataset**:
 - State
-- County (standardized, no " County" suffix)
+- County
 - Year
 - Median AQI
 - Days Ozone
@@ -75,19 +75,11 @@ This document describes variables in the input datasets and the merged dataset.
 **Records**: 923 counties (after inner join of both datasets)
 
 **Variables** (10 total):
-
-**Geographic Identifiers**:
 - **State** (String): Full name of the U.S. state
 - **County** (String): County name (standardized, no " County" suffix)
-
-**Health Outcome** (from CDC):
 - **Percent_COPD** (Numeric): Percentage of adults diagnosed with COPD in the county (Range: 3.3% to 13.3%)
 - **Quartile** (String): Quartile classification of COPD prevalence
-
-**Temporal** (from EPA):
 - **Year** (Integer): Year of data collection (2021)
-
-**Air Quality Variables** (from EPA):
 - **Median AQI** (Integer): Median Air Quality Index value (Range: 3 to 122)
 - **Days Ozone** (Integer): Number of days with elevated ozone levels (Range: 0 to 365)
 - **Days PM2.5** (Integer): Number of days with elevated PM2.5 levels (Range: 0 to 365)
