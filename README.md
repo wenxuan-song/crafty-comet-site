@@ -1,6 +1,25 @@
 # Technical Documentation
 
-This document provides technical documentation for the Air Quality and COPD Prevalence Analysis project.
+This document provides technical documentation for the Air Quality and COPD Prevalence Analysis project based on the workflow.ipynb.
+
+## Data Acquisition
+
+There are two ways to obtain the input data files:
+
+### Option 1: Download from Box (Recommended)
+- Download from: https://uofi.box.com/s/q60tyfy78aamuya8340uzchizcm6p2gl
+- Place files in Data/input_data/:
+  - annual_aqi_by_county_2021.csv
+  - County_COPD_prevalence.csv
+
+### Option 2: Download from Source Websites
+- EPA AQI data: https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual
+  - Download annual_aqi_by_county_2021.zip
+  - Extract the annual_aqi_by_county_2021.csv
+  - Save to Data/input_data/annual_aqi_by_county_2021.csv
+- CDC COPD data: https://www.cdc.gov/copd/php/case-reporting/county-level-estimates-in-copd.html
+  - Download CSV
+  - Save to Data/input_data/County_COPD_prevalence.csv
 
 ## Script Documentation
 
@@ -41,7 +60,11 @@ Verifies data integrity using SHA-256 checksums.
 
 ### Snakemake Workflow
 
-The project uses Snakemake for workflow automation.
+The project uses Snakemake for workflow automation. Execute the workflow using:
+
+```bash
+snakemake --cores 1
+```
 
 **Rules**:
 1. `check_integrity`: Verifies input data files
@@ -49,30 +72,30 @@ The project uses Snakemake for workflow automation.
 3. `integrate_datasets`: Merges cleaned datasets
 4. `all`: Default target producing final merged dataset
 
-**Execution**:
-```bash
-# Run complete workflow
-snakemake --cores 1
+### Analysis Workflow (workflow.ipynb)
 
-# Run specific rule
-snakemake clean_data --cores 1
-```
+The Jupyter notebook workflow.ipynb contains the complete analysis:
 
-## Data Pipeline
-
-1. **Data Acquisition**: Download from CDC and EPA websites, store in `Data/input_data/`
-2. **Data Cleaning**: Run `scripts/data_clean.py` to clean both datasets
-3. **Data Integration**: Run `scripts/data_integration.py` to merge datasets
-4. **Analysis**: Use `workflow.ipynb` for statistical analysis and visualization
+1. **Data Loading and Exploration**: Load merged dataset and check structure
+2. **Statistics**: Summary statistics for all variables
+3. **Correlation Analysis**: Correlation matrix between COPD and air quality variables
+4. **Visualizations**:
+   - Correlation heatmap
+   - Data distributions (histograms)
+   - Scatter plots for each pollutant vs COPD
+   - Direct comparison of pollutant correlations
+5. **Multicollinearity Diagnostics**: VIF (Variance Inflation Factor) analysis
+6. **OLS Regression**: Multiple regression model with all air quality variables
 
 ## Usage
 
 ### Quick Start
 
-1. Download data from Box link (see README.md) to `Data/input_data/`
-2. Set up environment: `pip install -r requirements.txt`
-3. Run workflow: `snakemake --cores 1`
-4. Open notebook: `jupyter notebook workflow.ipynb`
+1. **Get data** (choose one option above)
+2. **Set up environment**: `pip install -r requirements.txt`
+3. **Run Snakemake workflow**: `snakemake --cores 1`
+4. **Open notebook**: `jupyter notebook workflow.ipynb`
+5. **Run all cells** in the notebook to execute the complete analysis
 
 ### Running Scripts Directly
 
@@ -84,7 +107,7 @@ python scripts/check_integrity.py
 
 ## Troubleshooting
 
-- **FileNotFoundError**: Ensure input data files are in `Data/input_data/`
+- **FileNotFoundError**: Ensure input data files are in Data/input_data/
 - **ModuleNotFoundError**: Install packages with `pip install -r requirements.txt`
 - **Snakemake "Nothing to be done"**: Files are up to date. Use `--forceall` to re-run
 - **Jupyter errors**: Ensure merged dataset exists and kernel uses correct environment
